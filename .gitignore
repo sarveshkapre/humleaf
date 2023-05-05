@@ -22,6 +22,7 @@ build/
 venv/
 env/
 ENV/
+.env
 
 # Development files
 *.swp
