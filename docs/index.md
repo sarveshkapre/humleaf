@@ -11,4 +11,3 @@ Check out these pages:
 - [Why there is a Limit on Context Window Size for LLMs](context-window-limit.md)
 - [Understanding Token Size for LLMs](token-size.md)
 - [Finding Total Tokens for Code in a Git Repository](total-tokens.md)
-
