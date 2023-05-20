@@ -48,7 +48,8 @@ In summary, to ensure the safe and effective use of AI models in our digital wor
 
 <br />
 
-1. **Intent-Based Semantic Similarity Check**
+## Intent-Based Semantic Similarity Check
+<br />
 
 This approach revolves around comparing the LLM's output with a predefined set of typical responses for each intent. If the output's semantic similarity doesn't align with the expected responses, it's flagged as potentially suspicious. This process leverages advanced language models, like BERT, to calculate semantic similarity. 
 
@@ -117,7 +118,8 @@ This implementation is more robust and can be scaled to handle a large number of
 
 <br />
 
-2. **Input Sanitization**
+## Input Sanitization
+<br />
 
 The goal is to cleanse user input by removing or escaping potentially harmful characters or strings. This technique is widely used in preventing SQL injection attacks. In the context of LLMs, sanitization may involve removing or escaping certain special characters or command-like strings that could be utilized for an attack. 
 
@@ -175,7 +177,8 @@ class SecurePrompt:
 
 <br />
 
-3. **Heuristics-Based Filtering**
+## Heuristics-Based Filtering
+<br />
 
 This technique involves formulating a set of rules or patterns that are likely indicative of an injection attack. The user's input is then screened against these patterns. Any input matching a pattern is flagged as potentially malicious. 
 
