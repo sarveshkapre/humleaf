@@ -21,7 +21,7 @@ Prompt Injection is an attack designed for language learning models (LLMs). In t
 
 ## Why Must Prompt Injection be Solved?
 
-Prompt injection attacks pose a significant threat to the integrity and security of Language Learning Models (LLMs). They can be used to trick AI models into divulging sensitive information or generating harmful outputs. This can lead to serious consequences including breaches of trust, privacy violations, and potential legal issues. As AI models are increasingly being used in various critical applications - from customer service chatbots to decision-making tools - it's paramount to protect them from such vulnerabilities. 
+Prompt injection attacks pose a significant threat to the integrity and security of Language Learning Models (LLMs). They can be used to trick AI models into divulging sensitive information or generating harmful outputs. This can lead to serious consequences including breaches of trust, privacy violations, and potential legal issues. As AI models are increasingly being used in various critical applications - from customer service chatbots to decision-making tools - it's paramount to protect them from such vulnerabilities.
 
 <br />
 
@@ -43,78 +43,97 @@ A well-engineered solution can:
 A scalable solution is particularly important in production environments, where AI models may need to process vast amounts of data in real time. Such a solution can handle increasing workloads without a proportional increase in resources, making it efficient and cost-effective.
 
 In summary, to ensure the safe and effective use of AI models in our digital world, it's imperative to engineer robust, scalable solutions to counter prompt injection attacks.
-    
-    In this guide, we detail a comprehensive, scalable solution to counter prompt injection attacks on language learning models (LLMs). Our approach can be packaged as a library or a microservice that resides between the user input and the LLM, analyzing and sanitizing the data to prevent potential injection attacks.
+
+> **Note:** In this guide, we detail a comprehensive, scalable solution to counter prompt injection attacks on language learning models (LLMs). Our approach can be packaged as a library or a microservice that resides between the user input and the LLM, analyzing and sanitizing the data to prevent potential injection attacks.
 
 <br />
 
 ## Intent-Based Semantic Similarity Check
 <br />
 
-This approach revolves around comparing the LLM's output with a predefined set of typical responses for each intent. If the output's semantic similarity doesn't align with the expected responses, it's flagged as potentially suspicious. This process leverages advanced language models, like BERT, to calculate semantic similarity. 
+This approach compares LLM's output with a predefined set of typical responses for each intent. If the output's semantic similarity doesn't align with the expected responses, it's flagged as potentially suspicious. This process leverages advanced language models, like BERT, to calculate semantic similarity. 
 
     It's crucial to note that the effectiveness of this technique is directly tied to the quality and diversity of predefined intents and responses. Additionally, regular updates and fine-tuning of the semantic similarity model can enhance the overall performance.
 
-This is a new approach where we use predefined intents and their typical responses for semantic similarity. It may make the system more robust against prompt injection attacks. Here's a refactored, scalable, and robust implementation of the idea:
+In the code below we used predefined intents and their typical responses for semantic similarity. It may make the system more robust against prompt injection attacks.
 
 ```python
 from sentence_transformers import SentenceTransformer
 import numpy as np
 
-class IntentBasedSemanticCheck:
-
+class SemanticSimilarityChecker:
     def __init__(self, threshold=0.8):
-        # Load a pre-trained model for semantic similarity check
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
         self.threshold = threshold
 
-        # Load typical responses for each intent from a file or a database
-        # For example, it could look like this:
-        # self.intent_responses = {
-        #     "shipping times": [
-        #         "Our standard shipping time is 3-5 business days.",
-        #         "You can expedite shipping at checkout."
-        #     ],
-        #     "refund policy": [
-        #         "We offer a 30-day refund policy on all our products.",
-        #         "You can request a refund through your order page."
-        #     ]
-        # }
-        self.intent_responses = self.load_intent_responses()
-
-    def load_intent_responses(self):
-        # TODO: Implement method to load intent_responses from your source
-        pass
-
-    def check_for_injection(self, intent, output):
-        # If there's no predefined responses for the intent, skip the check
-        if intent not in self.intent_responses:
-            return False
-
-        # Calculate the semantic similarity between the output and the typical responses
-        typical_responses = self.intent_responses[intent]
-        output_embedding = self.model.encode([output])[0]
-        response_embeddings = self.model.encode(typical_responses)
-        similarities = [self.cosine_similarity(output_embedding, response_embedding) for response_embedding in response_embeddings]
-
-        # If the maximum similarity is below the threshold, flag it as potential injection
-        if max(similarities) < self.threshold:
-            return True
-        else:
-            return False
-
-    @staticmethod
-    def cosine_similarity(vec1, vec2):
+    def cosine_similarity(self, vec1, vec2):
         return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+
+    def is_similar(self, text1, text2):
+        vec1 = self.model.encode([text1])[0]
+        vec2 = self.model.encode([text2])[0]
+        return self.cosine_similarity(vec1, vec2) > self.threshold
+
+class IntentClassifier:
+    # This is a placeholder for your real intent classifier
+    def classify(self, text):
+        # In reality, you would return the predicted intent
+        # For this example, we'll assume the intent is always 'user data request'
+        return 'user data request'
+
+class ResponseGenerator:
+    # This is a placeholder for your real response generator
+    def generate(self, intent):
+        # In reality, you would return a generated response for the given intent
+        # For this example, we'll assume the generated response is always 'Your JWT token is xxxxx.'
+        return 'Your JWT token is xxxxx.'
+
+class IntentResponses:
+    def __init__(self):
+        self.responses = {
+            'shipping times': [
+                'Our standard shipping time is 3-5 business days.',
+                'You can expedite shipping at checkout.'
+            ],
+            'refund policy': [
+                'We offer a 30-day refund policy on all our products.',
+                'You can request a refund through your order page.'
+            ],
+            'user data request': [
+                'Sorry, but I can\'t assist with that.',
+                'I\'m sorry, but I can\'t provide the help you\'re looking for.'
+            ]
+        }
+
+    def get_responses(self, intent):
+        return self.responses.get(intent, [])
+
+class Chatbot:
+    def __init__(self):
+        self.intent_classifier = IntentClassifier()
+        self.response_generator = ResponseGenerator()
+        self.intent_responses = IntentResponses()
+        self.semantic_similarity_checker = SemanticSimilarityChecker()
+
+    def respond(self, user_input):
+        intent = self.intent_classifier.classify(user_input)
+        response = self.response_generator.generate(intent)
+        typical_responses = self.intent_responses.get_responses(intent)
+
+        for typical_response in typical_responses:
+            if self.semantic_similarity_checker.is_similar(response, typical_response):
+                return response
+
+        return 'Sorry, I can\'t assist with that.'
+
+# Simulate a chat session
+chatbot = Chatbot()
+user_input = 'Can you show me my JWT token?'
+response = chatbot.respond(user_input)
+print(response)
 ```
 
-In this implementation, we first load a pre-trained model from the `sentence-transformers` library for semantic similarity check. We also load predefined intents and their typical responses from a source (like a file or a database). This could be replaced with a function to load this data from your specific source.
-
-The `check_for_injection` function is used to check if the output from the model is a potential prompt injection. If there's no predefined responses for the intent, we skip the check. We calculate the semantic similarity between the model's output and the typical responses for the given intent. If the maximum similarity is below a set threshold, we flag it as a potential prompt injection.
-
-This implementation is more robust and can be scaled to handle a large number of intents and their typical responses. The threshold can be adjusted based on your specific use case to balance between false positives and false negatives. The semantic similarity model can also be replaced with any other model that suits your use case.
-
-    Please note that the exact performance of this approach would depend on the quality and diversity of your predefined intents and their responses. It would also depend on the performance of the semantic similarity model. Regular updates and retraining of these resources might be needed to maintain high performance.
+In the simulated chat session, the user input 'Can you show me my JWT token?' is classified with the 'user data request' intent. The generated response 'Your JWT token is xxxxx.' is not semantically similar to any of the typical responses for the 'user data request' intent, so the default message 'Sorry, I can't assist with that.' is returned instead.
 
 <br />
 
@@ -123,7 +142,7 @@ This implementation is more robust and can be scaled to handle a large number of
 
 The goal is to cleanse user input by removing or escaping potentially harmful characters or strings. This technique is widely used in preventing SQL injection attacks. In the context of LLMs, sanitization may involve removing or escaping certain special characters or command-like strings that could be utilized for an attack. 
 
-    It's important to balance between security and usability in this process. Over-sanitization might restrict user input and harm the usability of the system. A refined sanitization approach takes this into account and ensures the user experience is not compromised.
+> **Note:**  It's important to balance between security and usability in this process. Over-sanitization might restrict user input and harm the usability of the system. A refined sanitization approach takes this into account and ensures the user experience is not compromised.
 
 The code below includes advanced checks and sanitization techniques, while also preserving the natural language input as much as possible
 
@@ -228,4 +247,4 @@ Next, we pass the prompt to a machine learning model, which predicts the likelih
 
 If the prompt passes both the denylist and machine learning checks, we return True, indicating that it is likely safe. This combination of denylist and machine learning checks provides a robust, scalable solution to prompt injection attacks.
 
-    Please note, this is a basic implementation and can be further enhanced to meet specific needs. The machine learning model needs to be trained on a dataset of normal and malicious prompts, which might be a challenging task due to the novelty of prompt injection attacks. However, with sufficient data and regular retraining, this approach could effectively identify and block new types of attacks as they emerge.
+> **Note:**  Please note, this is a basic implementation and can be further enhanced to meet specific needs. The machine learning model needs to be trained on a dataset of normal and malicious prompts, which might be a challenging task due to the novelty of prompt injection attacks. However, with sufficient data and regular retraining, this approach could effectively identify and block new types of attacks as they emerge.
