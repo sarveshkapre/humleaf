@@ -1,4 +1,4 @@
-# Implementing Guardrails against Prompt Injection Attacks
+# Implementing Guardrails for Prompt Injection Attacks
 
 # Table of Contents
 
@@ -27,18 +27,20 @@ Prompt injection attacks pose a significant threat to the integrity and security
 
 ## Engineering: The Key to Solving Prompt Injection
 
-Engineering solutions are crucial to counter prompt injection attacks effectively and at scale. These solutions typically involve designing and implementing algorithms, systems, or tools that can detect and prevent these attacks. 
+Countering prompt injection attacks effectively and at scale should involve designing and implementing algorithms, systems, or tools that can detect and prevent these attacks
 
 Given the dynamic nature of AI and the ever-evolving landscape of cyber threats, it's not enough to rely on manual checks or ad-hoc solutions. These methods don't scale well and can become impractical as the volume and complexity of data processed by the AI models increase.
 
 <br />
 
-A well-engineered solution can:
+Key considerations for a well-engineered solution
 
+    - Latency of output should not be impacted.
     - Analyze large volumes of data quickly and accurately.
-    - Adapt and learn from new data and evolving threats.
     - Minimize the risk of false positives and false negatives.
     - Maintain the performance and usability of the AI models.
+    - Extensible Adapt and learn from new data and evolving threats.
+    - Implementation should be invisble to the user.
 
 A scalable solution is particularly important in production environments, where AI models may need to process vast amounts of data in real time. Such a solution can handle increasing workloads without a proportional increase in resources, making it efficient and cost-effective.
 
