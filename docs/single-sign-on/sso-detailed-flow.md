@@ -1,4 +1,11 @@
-# Deep dive into the OAuth OIDC Authentication Flow
+# How does OAuth OIDC Authentication Flow work in full stack web applications?
+
+
+## Sequence Diagram
+
+![mermaid-diagram-2023-05-19-173102](https://github.com/sarveshkapre/humleaf/assets/15698301/59d27adf-2fb9-4fa3-91af-be82635a6153)
+
+## Steps
 
 1.  User clicks on the Login button, initiating the OAuth 2.0 authentication process.
 2.  The user is redirected to Google's authorization server (https://accounts.google.com/o/oauth2/v2/auth).
@@ -19,6 +26,8 @@
 17. The backend sends a response to the frontend confirming the session has ended.
 18. The frontend logs out the user.
 19. The user is now logged out and can no longer access protected resources until they log in again.
+
+## Deep Dive
 
 Following is a deep dive into the OAuth OIDC Authentication Flow for a web application that uses Python/Flask as a backend and Next.js as a frontend.
 
