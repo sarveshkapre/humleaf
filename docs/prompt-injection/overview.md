@@ -1,25 +1,37 @@
 # Implementing Guardrails against Prompt Injection Attacks
 
+# Table of Contents
+
+1. [Introduction](#introduction)
+2. [What is Prompt Injection?](#what-is-prompt-injection)
+3. [Why Must Prompt Injection be Solved?](#why-must-prompt-injection-be-solved)
+4. [Engineering: The Key to Solving Prompt Injection](#engineering-the-key-to-solving-prompt-injection)
+5. [Implementing Solutions](#implementing-solutions)
+    - [Intent-Based Semantic Similarity Check](#intent-based-semantic-similarity-check)
+    - [Input Sanitization](#input-sanitization)
+    - [Heuristics-Based Filtering](#heuristics-based-filtering)
+
+<br />
 
 ## What is Prompt Injection?
 
-
 Prompt Injection is an attack designed for language learning models (LLMs). In this attack, a malicious user manipulates the prompt, or input, to an AI model, influencing it to generate inappropriate, harmful, or misleading outputs. This manipulation could compromise the integrity of the AI model, potentially leading to misinformation, breaches of privacy, or even security threats.
 
+<br />
 
 ## Why Must Prompt Injection be Solved?
 
-
 Prompt injection attacks pose a significant threat to the integrity and security of Language Learning Models (LLMs). They can be used to trick AI models into divulging sensitive information or generating harmful outputs. This can lead to serious consequences including breaches of trust, privacy violations, and potential legal issues. As AI models are increasingly being used in various critical applications - from customer service chatbots to decision-making tools - it's paramount to protect them from such vulnerabilities. 
 
+<br />
 
 ## Engineering: The Key to Solving Prompt Injection
-
 
 Engineering solutions are crucial to counter prompt injection attacks effectively and at scale. These solutions typically involve designing and implementing algorithms, systems, or tools that can detect and prevent these attacks. 
 
 Given the dynamic nature of AI and the ever-evolving landscape of cyber threats, it's not enough to rely on manual checks or ad-hoc solutions. These methods don't scale well and can become impractical as the volume and complexity of data processed by the AI models increase.
 
+<br />
 
 A well-engineered solution can:
 
@@ -34,6 +46,7 @@ In summary, to ensure the safe and effective use of AI models in our digital wor
     
     In this guide, we detail a comprehensive, scalable solution to counter prompt injection attacks on language learning models (LLMs). Our approach can be packaged as a library or a microservice that resides between the user input and the LLM, analyzing and sanitizing the data to prevent potential injection attacks.
 
+<br />
 
 1. **Intent-Based Semantic Similarity Check**
 
@@ -102,6 +115,8 @@ This implementation is more robust and can be scaled to handle a large number of
 
     Please note that the exact performance of this approach would depend on the quality and diversity of your predefined intents and their responses. It would also depend on the performance of the semantic similarity model. Regular updates and retraining of these resources might be needed to maintain high performance.
 
+<br />
+
 2. **Input Sanitization**
 
 The goal is to cleanse user input by removing or escaping potentially harmful characters or strings. This technique is widely used in preventing SQL injection attacks. In the context of LLMs, sanitization may involve removing or escaping certain special characters or command-like strings that could be utilized for an attack. 
@@ -158,6 +173,7 @@ class SecurePrompt:
 
     Note that these are only basic examples of what could be done for input sanitization and validation. The actual implementation could be much more complex, depending on the specifics of your use case and the potential threats you're trying to mitigate.
 
+<br />
 
 3. **Heuristics-Based Filtering**
 
